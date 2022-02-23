@@ -1,7 +1,7 @@
 ---
 
  - hosts: localhost
-
+   become: yes
   
 
    tasks:
@@ -39,7 +39,7 @@
 
           - jenkins
 
-          - java-devel
+          - openjdk-8-jdk
 
           - maven
 
