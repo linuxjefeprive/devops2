@@ -37,11 +37,11 @@
 
         packages:
 
-          - jenkins
-
-          - openjdk-8-jdk
+          - openjdk-11-jdk
 
           - maven
+
+          - jenkins
 
     - name: Bypass Setup Wizard
 
@@ -51,7 +51,13 @@
 
         regexp: '^JAVA_ARGS='
 
-        line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
+        line: 'JAVA_ARGS="-Djenkins.install.runSetupWizard=false"'
+
+    - name: Copy Bypass Script
+      
+      ansible.builtin.copy:
+        src: ~/devops2/init.groovy.d/basic-security.groovy
+        dest: /var/lib/jenkins/init.groovy.d/basic-security.groovy
 
 
     - name: ensure jenkins is restarted and running
