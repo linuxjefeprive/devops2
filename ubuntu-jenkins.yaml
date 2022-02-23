@@ -43,9 +43,17 @@
 
           - maven
 
+    - name: Bypass Setup Wizard
 
-    - name: ensure jenkins is running
+      lineinfile:
 
-      service: name=jenkins state=started
+        dest: /etc/default/jenkins
+
+        regexp: '^JAVA_ARGS='
+
+        line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
 
 
+    - name: ensure jenkins is restarted and running
+
+      service: name=jenkins state=restarted  

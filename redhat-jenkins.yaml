@@ -44,6 +44,17 @@
 
           - maven
 
+    - name: Configure JVM Arguments
+
+      lineinfile:
+
+        dest: /etc/sysconfig/jenkins
+
+        regexp: '^JAVA_ARGS='
+
+        line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
+
+
     - name: reload systemctl daemon
 
       command: systemctl daemon-reload
