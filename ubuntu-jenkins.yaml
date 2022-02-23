@@ -21,8 +21,6 @@
       become: yes
 
 
-
-
     - name: Install Java, Jenkins and Maven
 
       apt:
@@ -42,22 +40,6 @@
           - maven
 
           - jenkins
-
-    - name: Bypass Setup Wizard
-
-      lineinfile:
-
-        dest: /etc/default/jenkins
-
-        regexp: '^JAVA_ARGS='
-
-        line: 'JAVA_ARGS="-Djenkins.install.runSetupWizard=false"'
-
-    - name: Copy Bypass Script
-      
-      ansible.builtin.copy:
-        src: ~/devops2/init.groovy.d/basic-security.groovy
-        dest: /var/lib/jenkins/init.groovy.d/basic-security.groovy
 
 
     - name: ensure jenkins is restarted and running
