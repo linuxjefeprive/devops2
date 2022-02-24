@@ -75,11 +75,11 @@ echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize.
 
 # Using ansible play to add keys now, better solution. 
 #sleep 30s # Put the script to sleep for 0.5 minute 
-#ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` -i $HOME/.ssh/thekey.pem "exit"  #Here we add the remote key fingerprint for automation.
-#sudo ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` -i $HOME/.ssh/thekey.pem "exit" # We do the same for root 
+ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> ~/.ssh/known_hosts
+ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> $HOME/.ssh/known_hosts #Here we add the remote key fingerprint for automation.
 sleep 5s
 
-echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem, Please invoke keyscan.yaml to add host to know_hosts  "
+echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem,  "
 
 exit 0
 
