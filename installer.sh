@@ -16,12 +16,12 @@ case $1 in
 
 redhat)
 # This is where we install Ansible and git for Redhat
-sudo yum update
-sudo yum install epel-release && sudo yum install ansible
+sudo yum update -y
+sudo yum install epel-release -y && sudo yum install ansible -y
 sudo yum install git -y
 # Now we install terraform for redhat, so we can automaticly setup a remote tomcat server on aws later, this is easier in terraform than in ansible.
 sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
+sudo yum-config-manager -y --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install -y terraform
 ;;
 
