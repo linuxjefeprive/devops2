@@ -147,14 +147,13 @@ tool:
     
   jobs:
   - script: >
-      pipelineJob("Seed or update all pipelines") {
+      pipelineJob("Maven Project WAR file for tomcat") {
       definition {
           cpsScm {
               scm {
                   git{
                     remote {
-                      url("https://github.com/linuxjefeprive/jenkins-jobdsl.git")
-                    }
+                      url("https://github.com/linuxjefeprive/Hello-World-Code.git")
                     branch("*/main")
                   }
               }
