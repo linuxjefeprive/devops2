@@ -1,9 +1,34 @@
 ---
-  - name: Keyscan to add key
-    hosts: ec2
-    tasks:
-    - name: Write the new ec2 instance host key to known hosts
+- name: Example play
 
-      connection: local
+  gather_facts: no
 
-      shell: "ssh-keyscan -H {{ inventory_hostname }} >> ~/.ssh/known_hosts"
+  hosts: all
+
+  tasks:
+
+    - name: Check SSH known_hosts for {{ inventory_hostname }}
+
+      local_action: shell ssh-keygen -l -F {{ inventory_hostname }}
+
+      register: checkForKnownHostsEntry
+
+      failed_when: false
+
+      changed_when: false
+
+      ignore_errors: yes
+
+    - name: Add {{ inventory_hostname }} to SSH known hosts automatically
+
+      when: checkForKnownHostsEntry.rc == 1
+
+      changed_when: checkForKnownHostsEntry.rc == 1
+
+      local_action: 
+
+         module: shell
+
+         args: ssh-keyscan -H "{{ inventory_hostname }}" >> $HOME/.ssh/known_hosts
+
+
