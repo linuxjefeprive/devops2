@@ -6,7 +6,7 @@ HOME=`sudo grep $(logname) /etc/passwd | awk -F: '{print $6}'` # Set HOME folder
 PWD=$(pwd) # We want to set the folder the script is run from  as a variable, for later usage in the script.
 USER=$(logname)
 if (( $EUID != 0 )); then # Because our script requires root privileges we need to check if the script is run as root. If not, the script should fail$
-    echo "Please run this script as root. (sudo ./terraform.sh)"
+    echo "Please run this script as root. (sudo ./installer.sh)"
     exit 1
 fi
 
@@ -44,7 +44,7 @@ sudo apt-get update && sudo apt-get install terraform
 
 
 *)
-echo "Usage of script is as follows: './installer.sh redhat/ubuntu' so for redhat release use; './installer.sh redhat' and for ubuntu use './installer.sh ubuntu' "
+echo "Usage of script is as follows: 'sudo ./installer.sh redhat/ubuntu' so for redhat release use; 'sudo ./installer.sh redhat' and for ubuntu use 'sudo ./installer.sh ubuntu' "
 exit 0
 ;;
 
@@ -74,13 +74,11 @@ sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfi
 echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize. (or ssh might not be ready) "
 
 sleep 30s # Put the script to sleep for 0.5 minute 
-ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` -i $HOME/.ssh/thekey.pem #Here we add the remote key fingerprint for automation.
+ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` #Here we add the remote key fingerprint for automation.
 
 sleep 5s
 
-echo " All done, browse to `/usr/bin/terraform output -raw instance_public_ip`:8080 to see the result. "
-
-exit 0
+echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem  "
 
 exit 0
 
