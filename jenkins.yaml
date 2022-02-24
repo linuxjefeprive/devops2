@@ -25,18 +25,3 @@ tool:
           installers:
           - maven:
               id: "3.6.0"
-  jobs:
-  - script: >
-      pipelineJob("Maven Project WAR file for tomcat") {
-      definition {
-          cpsScm {
-              scm {
-                  git{
-                    remote {
-                      url("https://github.com/linuxjefeprive/Hello-World-Code.git")
-                    branch("*/main")
-                  }
-              }
-          }
-        }
-      }
