@@ -111,7 +111,12 @@
       ansible.builtin.copy:
         src: jenkins.yaml
         dest: /var/lib/jenkins/jenkins.yaml
-
+        
+    - name: Move the Script Approval Disabler Script to Jenkins Folder
+      ansible.builtin.copy:
+        src: disable-script-security.groovy
+        dest: /var/lib/jenkins/init.groovy.d/disable-script-security.groovy
+        
     - name: Restart Jenkins Service 
       ansible.builtin.service:
         name: jenkins
