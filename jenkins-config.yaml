@@ -73,7 +73,7 @@
     - name: Pause to wait for Jenkins to fully start up
 
       pause:
-        minutes: 1
+        seconds: 30
 
     - name: install plugin
       jenkins_plugin:
@@ -93,9 +93,7 @@
         - cloudbees-folder
         - configuration-as-code
         - credentials-binding
-        - email-ext
         - git
-        - github-branch-source
         - gradle
         - ldap
         - job-dsl
