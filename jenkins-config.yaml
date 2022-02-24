@@ -4,7 +4,7 @@
     become: yes
     vars_prompt:
       name: admin_user_pass
-      prompt: what is the pass?
+      prompt: User will be: "jenkins" what should password be?
 
     tasks:
 
@@ -107,11 +107,18 @@
         - timestamper
         - workflow-aggregator
         - ws-cleanup
+        
     - name: Move JCasC config file to Jenkins Folder
       ansible.builtin.copy:
         src: jenkins.yaml
         dest: /var/lib/jenkins/jenkins.yaml
         
+    - name: Create Folder for Groovy script in Jenkins Home
+      ansible.builtin.file:
+        path: /var/lib/jenkins/init.groovy.d/
+        state: directory
+        mode: '0755'
+ 
     - name: Move the Script Approval Disabler Script to Jenkins Folder
       ansible.builtin.copy:
         src: disable-script-security.groovy
