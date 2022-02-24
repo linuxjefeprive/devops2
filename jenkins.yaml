@@ -25,3 +25,20 @@ tool:
           installers:
           - maven:
               id: "3.6.0"
+              
+jobs:
+    - script: >
+        pipelineJob("Seed or update all pipelines") {
+        definition {
+            cpsScm {
+                scm {
+                    git{
+                      remote {
+                        url("https://github.com/m-goos/jenkins-jobdsl-seedrepo-example.git")
+                      }
+                      branch("*/main")
+                    }
+                }
+            }
+          }
+        }             
