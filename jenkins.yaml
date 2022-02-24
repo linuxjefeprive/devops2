@@ -7,15 +7,15 @@ tool:
   ansibleInstallation:
     installations:
     - home: "/usr/bin/"
-      name: "Ansible"
+      name: "ansible"
   git:
     installations:
     - home: "/usr/bin/git"
-      name: "Git"
+      name: "git"
   jdk:
     installations:
     - home: "/usr/lib/jvm/java-11-openjdk-amd64"
-      name: "Java 8"
+      name: "java 8"
   maven:
     installations:
     - home: "/usr/share/maven"
