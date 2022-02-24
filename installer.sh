@@ -64,7 +64,7 @@ cd $HOME/devops2/terraform/
 /usr/bin/terraform apply -auto-approve
 
 sudo echo "[ec2]
-`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" >> /etc/ansible/hosts
+`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" > /etc/ansible/hosts
 # Here we add the IP Address and username + SSH key for the newly created EC2 Instance to the ansible hosts file, so we are able to connect to it. 
 
 sudo chown $USER $HOME/.ssh/thekey.pem # Because of Sudo/Root invocation the keyfile is now owned by root. We need to change this to the user that runs the script. 
@@ -74,8 +74,7 @@ sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfi
 echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize. (or ssh might not be ready) "
 
 sleep 30s # Put the script to sleep for 0.5 minute 
-ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` #Here we add the remote key fingerprint for automation.
-
+ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` -i $HOME/.ssh/thekey.pem "exit"  #Here we add the remote key fingerprint for automation.
 sleep 5s
 
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem  "
