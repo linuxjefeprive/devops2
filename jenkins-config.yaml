@@ -98,6 +98,7 @@
         - github-branch-source
         - gradle
         - ldap
+        - job-dsl
         - mailer
         - matrix-auth
         - maven
