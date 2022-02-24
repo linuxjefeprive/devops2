@@ -28,13 +28,13 @@ tool:
               
 jobs:
     - script: >
-        pipelineJob("Seed or update all pipelines") {
+        pipelineJob("Seed / Import all piplines") {
         definition {
             cpsScm {
                 scm {
                     git{
                       remote {
-                        url("https://github.com/m-goos/jenkins-jobdsl-seedrepo-example.git")
+                        url("https://github.com/linuxjefeprive/jenkins-seed.git")
                       }
                       branch("*/main")
                     }
