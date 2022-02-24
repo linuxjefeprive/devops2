@@ -1,0 +1,6 @@
+## This is the configuration for JCasC , setting the Jenkins URL correctly.
+unclassified:
+
+  location:
+
+    url: http://localhost:8080/

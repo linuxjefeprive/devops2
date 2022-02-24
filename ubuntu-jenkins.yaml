@@ -39,7 +39,7 @@
 
           - maven
 
-          - jenkins
+          - jenkins:latest
 
 
     - name: ensure jenkins is restarted and running
