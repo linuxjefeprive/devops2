@@ -1,5 +1,17 @@
 #!/bin/bash
 
+
+HOME=`sudo grep $(logname) /etc/passwd | awk -F: '{print $6}'` # Set HOME folder of user invoking the script.
+
+PWD=$(pwd) # We want to set the folder the script is run from  as a variable, for later usage in the script.
+USER=$(logname)
+if (( $EUID != 0 )); then # Because our script requires root privileges we need to check if the script is run as root. If not, the script should fail$
+    echo "Please run this script as root. (sudo ./terraform.sh)"
+    exit 1
+fi
+
+
+
 case $1 in
 
 redhat)
@@ -33,8 +45,42 @@ sudo apt-get update && sudo apt-get install terraform
 
 *)
 echo "Usage of script is as follows: './installer.sh redhat/ubuntu' so for redhat release use; './installer.sh redhat' and for ubuntu use './installer.sh ubuntu' "
+exit 0
 ;;
 
 esac
+
+## This is where we set up AWS Instance using Terraform, and set up SSH and Ansible configuration so we can use Ansible on AWS Instance later on.
+
+
+mkdir $HOME/.ssh/ # make sure folder .ssh exists
+chown $USER $HOME/.ssh/  # set owner and group to user instead of root 
+chgrp $USER $HOME/.ssh/
+
+cd $HOME/devops2/terraform/
+
+/usr/bin/terraform init # using full path to binary because root on RPM does not include /usr/local/bin in PATH's  
+/usr/bin/terraform plan 
+/usr/bin/terraform apply -auto-approve
+
+sudo echo "[ec2]
+`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" >> /etc/ansible/hosts
+# Here we add the IP Address and username + SSH key for the newly created EC2 Instance to the ansible hosts file, so we are able to connect to it. 
+
+sudo chown $USER $HOME/.ssh/thekey.pem # Because of Sudo/Root invocation the keyfile is now owned by root. We need to change this to the user that runs the script. 
+sudo chgrp $USER $HOME/.ssh/thekey.pem # Set group to users group.
+sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfile to be only rw for the owner, to prevent security issues, and make it easier for ansible to work with the file. 
+
+echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize. (or ssh might not be ready) "
+
+sleep 30s # Put the script to sleep for 0.5 minute 
+ssh -o "StrictHostKeyChecking no" ec2-user@`/usr/bin/terraform output -raw instance_public_ip` -i $HOME/.ssh/thekey.pem #Here we add the remote key fingerprint for automation.
+
+sleep 5s
+
+echo " All done, browse to `/usr/bin/terraform output -raw instance_public_ip`:8080 to see the result. "
+
+exit 0
+
 exit 0
 
