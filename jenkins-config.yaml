@@ -4,7 +4,7 @@
     become: yes
     vars_prompt:
       name: admin_user_pass
-      prompt: User will be: "jenkins" what should password be?
+      prompt: User will be "jenkins", what should password be?
 
     tasks:
 
