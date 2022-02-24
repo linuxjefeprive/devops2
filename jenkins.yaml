@@ -1,6 +1,6 @@
 ## This is the configuration for JCasC , setting the Jenkins Configuration correctly.
 unclassified:
-location:
+  location:
     adminAddress: "address not configured yet <nobody@nowhere>"
     url: "http://localhost:8080/"
 tool:
@@ -24,11 +24,10 @@ tool:
       - installSource:
           installers:
           - maven:
-              id: "3.6.0"
-              
+              id: "3.6.0"          
 jobs:
     - script: >
-        pipelineJob("Seed / Import all piplines") {
+        pipelineJob("Seed and import all piplines") {
         definition {
             cpsScm {
                 scm {
