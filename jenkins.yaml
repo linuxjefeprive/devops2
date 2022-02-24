@@ -144,3 +144,20 @@ tool:
   mavenGlobalConfig:
     globalSettingsProvider: "standard"
     settingsProvider: "standard"
+    
+  jobs:
+  - script: >
+      pipelineJob("Seed or update all pipelines") {
+      definition {
+          cpsScm {
+              scm {
+                  git{
+                    remote {
+                      url("https://github.com/linuxjefeprive/jenkins-jobdsl.git")
+                    }
+                    branch("*/main")
+                  }
+              }
+          }
+        }
+      }
