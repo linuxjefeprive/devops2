@@ -77,9 +77,7 @@ sudo chgrp $USER $HOME/.ssh/thekey.pem # Set group to users group.
 sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfile to be only rw for the owner, to prevent security issues, and make it easier for ansible to work with the file. 
 
 echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize. (or ssh might not be ready) "
-
-# Using ansible play to add keys now, better solution. 
-#sleep 30s # Put the script to sleep for 0.5 minute 
+sleep 30s # Put the script to sleep for 0.5 minute 
 ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> ~/.ssh/known_hosts
 ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> $HOME/.ssh/known_hosts #Here we add the remote key fingerprint for automation.
 sleep 5s
