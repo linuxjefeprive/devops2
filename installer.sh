@@ -16,7 +16,7 @@ read -p "Did you modify the devops2/terraform/creds.tf file to contain your up t
 
 case "$choice" in 
 
-  y|Y ) echo echo "script will start";;
+  y|Y ) echo "script will start";;
 
   n|N ) echo " Please modify creds.tf in terraform folder before proceeding " 
        exit 1
