@@ -163,3 +163,14 @@
         owner: jenkins
         group: jenkins
         mode: 0600
+        
+    - name: Move Jenkins SSH key to EC2 instance so Ansible can connect using Jenkins user.
+      hosts: ec2
+       - name: Upload SSH key
+         copy:
+          src: /var/lib/jenkins/.ssh/jenkins-key.pub
+          dest: /home/ec2-user/
+          owner: ec2-user
+          group: ec2-user
+          mode: 0700
+      
