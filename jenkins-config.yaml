@@ -128,3 +128,24 @@
       ansible.builtin.service:
         name: jenkins
         state: restarted 
+        
+        
+    - name: Create Folder for ssh key in Jenkins Home
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.ssh/
+        state: directory
+        mode: '0600'
+        
+    - name: generate SSH key
+      hosts: 127.0.0.1
+      connection: local
+      vars:
+        ssh_key_filename: jenkins-key
+      tasks:
+        - name: generate SSH key "{{ssh_key_filename}}"
+          openssh_keypair:
+            path: "/var/lib/jenkins/.ssh/{{ssh_key_filename}}"
+            type: rsa
+            size: 4096
+            state: present
+            force: no
