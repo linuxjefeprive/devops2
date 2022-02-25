@@ -1,0 +1,8 @@
+#!/usr/bin/expect
+
+set timeout -1
+set HOME [lindex $argv 0]
+#set HOME /home/bent/
+spawn ansible-playbook $HOME/devops2/playbooks/tomcat-ec2.yaml
+
+expect "*continue connecting*" { send "yes\r" }
