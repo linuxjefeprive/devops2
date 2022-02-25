@@ -145,18 +145,41 @@
         size: 4096
         state: present
         force: no
-        
-    - hosts: ec2
-      tasks:
-      - name: Upload SSH key
-      - ansible.builtin.copy:
-          src: /var/lib/jenkins/.ssh/jenkins-key.pub
-          dest: /home/ec2-user/
-          owner: ec2-user
-          group: ec2-user
-          mode: 0700
+
+    - file:
+        path: /var/lib/jenkins/.ssh/
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key.pub
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+    
+  - hosts: ec2
+    tasks:
+    - name: Copy Jenkins SSH key to EC2-Instance
+      ansible.builtin.copy:
+        src: /var/lib/jenkins/.ssh/jenkins-key.pub
+        dest: /home/ec2-user/
+        owner: ec2-user
+        group: ec2-user
+        mode: 0700
+
+    - name: Import the key using script
+      ansible.builtin.script: ssh-import.sh 
       
-        
+  - hosts: localhost
+    become: yes
+    tasks:        
     - file:
         path: /var/lib/jenkins/.ssh/
         owner: jenkins
