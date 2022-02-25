@@ -11,10 +11,32 @@ if (( $EUID != 0 )); then # Because our script requires root privileges we need 
     exit 1
 fi
 
-echo "Hello, are you running redhat or ubuntu? Please type redhat or ubuntu"
+
+read -p "Did you modify the devops2/terraform/creds.tf file to contain your up to date AWS credentials? (y/n)" choice
+
+case "$choice" in 
+
+  y|Y ) echo echo "script will start";;
+
+  n|N ) echo " Please modify creds.tf in terraform folder before proceeding " 
+       exit 1
+;;
+
+  * ) echo "invalid";;
+
+esac
+
+
+
+
+echo " Are you running redhat or ubuntu? Please type redhat or ubuntu"
+echo
 read -p "  Distro:  " OS
+echo
 echo " What would you like the password for jenkins user 'jenkins' to be? (text hidden)"
+echo
 read -sp "  Jenkins Password:  " PASS
+echo 
 
 case $OS in
 
