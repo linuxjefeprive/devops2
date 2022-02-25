@@ -23,7 +23,6 @@ sudo yum install git -y
 sudo yum install -y yum-utils
 sudo yum-config-manager -y --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install -y terraform
-sudo ansible-galaxy collection install ansible.posix
 ;;
 
 
@@ -33,7 +32,6 @@ sudo apt update
 sudo apt install -y software-properties-common 
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt install -y ansible
-sudo ansible-galaxy collection install ansible.posix
 sudo apt install -y git
 
 ## Now we install Terraform in Ubuntu so we can create a tomcat aws instance easily later.
@@ -66,7 +64,7 @@ cd $HOME/devops2/terraform/
 /usr/bin/terraform apply -auto-approve
 
 sudo echo "[ec2]
-`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" > /etc/ansible/hosts
+ec2-ansible ansible_host=`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" > /etc/ansible/hosts
 # Here we add the IP Address and username + SSH key for the newly created EC2 Instance to the ansible hosts file, so we are able to connect to it. 
 
 sudo chown $USER $HOME/.ssh/thekey.pem # Because of Sudo/Root invocation the keyfile is now owned by root. We need to change this to the user that runs the script. 

@@ -10,7 +10,7 @@ fi
 sudo cp $HOME/.ssh/known_hosts /var/lib/jenkins/.ssh/known_hosts
 
 # Add a Jenkins specific inventory entry into Ansible 
-sudo cat /etc/ansible/hosts > adjust && sed -i 's/ec2/ec2-jenkins/g' adjust && sed -i 's/ansible_ssh.*/ansible_ssh_private_key_file=\/var\/lib\/jenkins\/.ssh\/jenkins-key/g' adjust
+sudo cat /etc/ansible/hosts > adjust && sed -i 's/ec2-ansible/ec2-jenkins/g' adjust &&  sed -i 's/\[ec2\]/\[ec2-jenkins\]/g' adjust && sed -i 's/ansible_ssh_private.*/ansible_ssh_private_key_file=\/var\/lib\/jenkins\/.ssh\/jenkins-key/g' adjust
 cat adjust | sudo tee -a /etc/ansible/hosts 
 rm adjust
 
