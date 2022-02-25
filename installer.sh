@@ -57,6 +57,11 @@ mkdir $HOME/.ssh/ # make sure folder .ssh exists
 chown $USER $HOME/.ssh/  # set owner and group to user instead of root 
 chgrp $USER $HOME/.ssh/
 
+touch $HOME/.ssh/known_hosts
+chown $USER $HOME/.ssh/known_hosts
+chgrp $USER $HOME/.ssh/known_hosts
+chmod 644 $HOME/.ssh/known_hosts
+
 cd $HOME/devops2/terraform/
 
 /usr/bin/terraform init # using full path to binary because root on RPM does not include /usr/local/bin in PATH's  
