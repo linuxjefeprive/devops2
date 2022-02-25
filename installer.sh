@@ -204,8 +204,10 @@ echo " Jenkins ssh-settings.sh did not run correctly " >> $HOME/devops2/installe
 fi
 
 
-ansible-playbook $HOME/devops2/playbooks/tomcat-ec2.yaml
-
+$HOME/devops2/config-scripts/expect/expect2 $HOME
+echo expect2 script finished
+$HOME/devops2/config-scripts/expect/expect3 $HOME
+echo expect3 script finished 
 if [ $? = 0 ]; then
 echo " Tomcat has been installed, and is ready to receive WAR file for deployment on EC2 instance "
 echo " Tomcat has been installed, and is ready to receive WAR file for deployment on EC2 instance " >> $HOME/devops2/installer.sh.log

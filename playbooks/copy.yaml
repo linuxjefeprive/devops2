@@ -1,0 +1,20 @@
+---
+
+  - hosts: ec2
+    tasks:
+    - name: Copy Jenkins SSH key to EC2-Instance
+      ansible.builtin.copy:
+        src: /var/lib/jenkins/.ssh/jenkins-key.pub
+        dest: /home/ec2-user/
+        owner: ec2-user
+        group: ec2-user
+        mode: 0700
+
+    - name: Import the key using script
+      ansible.builtin.script: ssh-import.sh
+
+
+
+
+
+
