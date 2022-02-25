@@ -184,7 +184,7 @@
         path: /var/lib/jenkins/.ssh/
         owner: jenkins
         group: jenkins
-        mode: 0600
+        mode: 0700
 
     - file:
         path: /var/lib/jenkins/.ssh/jenkins-key
