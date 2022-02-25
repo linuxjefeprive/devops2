@@ -136,13 +136,24 @@
         state: directory
         mode: '0600'
 
-        - name: generate SSH key "{{ssh_key_filename}}"
-          vars: 
-            ssh_key_filename: jenkins-key
-          openssh_keypair:
-            path: "/var/lib/jenkins/.ssh/{{ssh_key_filename}}"
-            type: rsa
-            size: 4096
-            state: present
-            force: no
+    - name: generate SSH key "{{ssh_key_filename}}"
+      vars: 
+        ssh_key_filename: jenkins-key
+      openssh_keypair:
+        path: "/var/lib/jenkins/.ssh/{{ssh_key_filename}}"
+        type: rsa
+        size: 4096
+        state: present
+        force: no
+        
+    - file:
+        path: /var/lib/jenkins/.ssh/
+        owner: jenkins
+        group: jenkins
+        mode: 0600
 
+    - file:
+        path: /var/lib/jenkins/.ssh/*
+        owner: jenkins
+        group: jenkins
+        mode: 0600
