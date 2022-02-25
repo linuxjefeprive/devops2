@@ -59,7 +59,7 @@ echo "Something went wront Installing Terraform or Ansible" > $HOME/devops2/inst
 
 fi
 
-ansible-playbook $HOME/devops2/redhat-jenkins.yaml
+ansible-playbook $HOME/devops2/playbooks/redhat-jenkins.yaml
 if [ $? = 0 ]; then
 echo "Ansible Playbook 'redhat-jenkins.yaml has installed jenkins!'"
 echo "Ansible Playbook 'redhat-jenkins.yaml has installed jenkins!'" >> $HOME/devops2/installer.sh.log
@@ -96,7 +96,7 @@ echo "Something went wront Installing Terraform or Ansible"
 echo "Something went wront Installing Terraform or Ansible" > $HOME/devops2/installer.sh.log
 fi 
 
-ansible-playbook $HOME/devops2/ubuntu-jenkins.yaml
+ansible-playbook $HOME/devops2/playbooks/ubuntu-jenkins.yaml
 
 if [ $? = 0 ]; then
 echo "Ansible Playbook 'redhat-ubuntu.yaml has installed jenkins!'"
@@ -180,7 +180,7 @@ fi
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem,"
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem " >> $HOME/devops2/installer.sh.log
 
-$HOME/devops2/expect.sh $PASS $HOME
+$HOME/devops2/config-scripts/expect/expect.sh $PASS $HOME
 
 if [ $? = 0 ]; then
 echo " Jenkins service is configured, "
@@ -192,7 +192,7 @@ echo "jenkins-config.yaml did not run correctly" >> $HOME/devops2/installer.sh.l
 fi
 
 
-source $HOME/devops2/jenkins-ssh-settings.sh
+source $HOME/devops2/config-scripts/jenkins-ssh-settings.sh
 
 if [ $? = 0 ]; then
 echo " Jenkins SSH settings configured to allow ansible playbooks te be deployed on EC2 host "
@@ -204,7 +204,7 @@ echo " Jenkins ssh-settings.sh did not run correctly " >> $HOME/devops2/installe
 fi
 
 
-ansible-playbook $HOME/devops2/tomcat-ec2.yaml
+ansible-playbook $HOME/devops2/playbooks/tomcat-ec2.yaml
 
 if [ $? = 0 ]; then
 echo " Tomcat has been installed, and is ready to receive WAR file for deployment on EC2 instance "
