@@ -23,6 +23,7 @@ sudo yum install git -y
 sudo yum install -y yum-utils
 sudo yum-config-manager -y --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
 sudo yum -y install -y terraform
+sudo ansible-galaxy collection install ansible.posix
 ;;
 
 
@@ -32,6 +33,7 @@ sudo apt update
 sudo apt install -y software-properties-common 
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt install -y ansible
+sudo ansible-galaxy collection install ansible.posix
 sudo apt install -y git
 
 ## Now we install Terraform in Ubuntu so we can create a tomcat aws instance easily later.
