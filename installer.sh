@@ -11,15 +11,18 @@ if (( $EUID != 0 )); then # Because our script requires root privileges we need 
     exit 1
 fi
 
+echo "Hello, are you running redhat or ubuntu? Please type redhat or ubuntu"
+read -p "  Distro:  " OS
+echo " What would you like the password for jenkins user 'jenkins' to be? (text hidden)"
+read -sp "  Jenkins Password:  " PASS
 
-
-case $1 in
+case $OS in
 
 redhat)
-# This is where we install Ansible and git for Redhat
+# This is where we install Ansible, git and expect for Redhat
 sudo yum update -y
 sudo yum install epel-release -y && sudo yum install ansible -y
-sudo yum install git -y
+sudo yum install git expect -y
 # Now we install terraform for redhat, so we can automaticly setup a remote tomcat server on aws later, this is easier in terraform than in ansible.
 sudo yum install -y yum-utils
 sudo yum-config-manager -y --add-repo https://rpm.releases.hashicorp.com/RHEL/hashicorp.repo
@@ -48,12 +51,12 @@ fi
 
 
 ubuntu)
-# This is where we install ansible and git for ubuntu
+# This is where we install ansible, expect and git for ubuntu
 sudo apt update
 sudo apt install -y software-properties-common 
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt install -y ansible
-sudo apt install -y git
+sudo apt install -y git expect 
 
 ## Now we install Terraform in Ubuntu so we can create a tomcat aws instance easily later.
 sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl
@@ -86,7 +89,7 @@ fi
 
 
 *)
-echo "Usage of script is as follows: 'sudo ./installer.sh redhat/ubuntu' so for redhat release use; 'sudo ./installer.sh redhat' and for ubuntu use 'sudo ./installer.sh ubuntu' "
+echo "Usage of script is as follows: 'sudo ./installer.sh, type redhat/ubuntu' so for redhat release use; 'sudo ./installer.sh redhat' and for ubuntu use 'sudo ./installer.sh ubuntu' "
 exit 0
 ;;
 
@@ -155,7 +158,7 @@ fi
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem,"
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem " >> $HOME/devops2/installer.sh.log
 
-ansible-playbook $HOME/devops2/jenkins-config.yaml
+$HOME/devops2/expect.sh $PASS $HOME
 
 if [ $? = 0 ]; then
 echo " Jenkins service is configured, "
