@@ -1,0 +1,201 @@
+
+---
+  - hosts: localhost
+    become: yes
+    vars_prompt:
+      name: admin_user_pass
+      prompt: User will be 'jenkins', what should password be?
+
+    tasks:
+
+    - name: read admin pwd
+
+      ansible.builtin.shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+
+      register: adminpwd
+
+    - name: unlock and add admin user
+
+      jenkins_script:
+
+       script: |
+
+        import jenkins.model.*
+
+        import hudson.security.*
+
+        def instance = Jenkins.getInstance()
+
+        def hudsonRealm = new HudsonPrivateSecurityRealm(false)
+
+        hudsonRealm.createAccount('jenkins', '${user_pwd}')
+
+        instance.setSecurityRealm(hudsonRealm)
+
+        def strategy = new FullControlOnceLoggedInAuthorizationStrategy()
+
+        strategy.setAllowAnonymousRead(false)
+
+        instance.setAuthorizationStrategy(strategy)
+
+        instance.save()
+
+       args:
+
+        user_pwd: "{{ admin_user_pass }}"
+
+       user: admin
+
+       password: "{{ adminpwd.stdout }}"
+
+
+
+    - name: complete setup wizard
+
+      jenkins_script:
+
+       script: |
+
+        import static jenkins.model.Jenkins.instance as jenkins
+
+        import jenkins.install.InstallState
+
+        if (!jenkins.installState.isSetupComplete()) {
+
+          InstallState.INITIAL_SETUP_COMPLETED.initializeState()
+
+        }
+
+       user: admin
+
+       password: "{{ adminpwd.stdout }}"
+
+    - name: Pause to wait for Jenkins to fully start up
+
+      pause:
+        seconds: 30
+
+    - name: install plugin
+      jenkins_plugin:
+
+       name: "{{ item }}"
+
+       state: latest
+
+       url_username: admin
+
+       url_password: "{{ adminpwd.stdout }}"
+
+      with_items:
+        - ansible
+        - ant
+        - build-timeout 
+        - cloudbees-folder
+        - configuration-as-code
+        - credentials-binding
+        - git
+        - gradle
+        - ldap
+        - job-dsl
+        - mailer
+        - matrix-auth
+        - maven
+        - pam-auth
+        - pipeline-github-lib
+        - pipeline-stage-view
+        - ssh-slaves
+        - timestamper
+        - workflow-aggregator
+        - ws-cleanup
+        
+    - name: Move JCasC config file to Jenkins Folder
+      ansible.builtin.copy:
+        src: jenkins.yaml
+        dest: /var/lib/jenkins/jenkins.yaml
+        
+    - name: Create Folder for Groovy script in Jenkins Home
+      ansible.builtin.file:
+        path: /var/lib/jenkins/init.groovy.d/
+        state: directory
+        mode: '0755'
+ 
+    - name: Move the Script Approval Disabler Script to Jenkins Folder
+      ansible.builtin.copy:
+        src: disable-script-security.groovy
+        dest: /var/lib/jenkins/init.groovy.d/disable-script-security.groovy
+        
+    - name: Restart Jenkins Service 
+      ansible.builtin.service:
+        name: jenkins
+        state: restarted 
+        
+        
+    - name: Create Folder for ssh key in Jenkins Home
+      ansible.builtin.file:
+        path: /var/lib/jenkins/.ssh/
+        state: directory
+        mode: '0700'
+
+    - name: generate SSH key "{{ssh_key_filename}}"
+      vars: 
+        ssh_key_filename: jenkins-key
+      openssh_keypair:
+        path: "/var/lib/jenkins/.ssh/{{ssh_key_filename}}"
+        type: rsa
+        size: 4096
+        state: present
+        force: no
+
+    - file:
+        path: /var/lib/jenkins/.ssh/
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key.pub
+        owner: jenkins
+        group: jenkins
+        mode: 0777
+    
+  - hosts: ec2
+    tasks:
+    - name: Copy Jenkins SSH key to EC2-Instance
+      ansible.builtin.copy:
+        src: /var/lib/jenkins/.ssh/jenkins-key.pub
+        dest: /home/ec2-user/
+        owner: ec2-user
+        group: ec2-user
+        mode: 0700
+
+    - name: Import the key using script
+      ansible.builtin.script: ssh-import.sh 
+      
+  - hosts: localhost
+    become: yes
+    tasks:        
+    - file:
+        path: /var/lib/jenkins/.ssh/
+        owner: jenkins
+        group: jenkins
+        mode: 0700
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key
+        owner: jenkins
+        group: jenkins
+        mode: 0600
+        
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key.pub
+        owner: jenkins
+        group: jenkins
+        mode: 0600
+       
+

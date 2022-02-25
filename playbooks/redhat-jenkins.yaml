@@ -1,0 +1,92 @@
+- hosts: localhost
+  become: true
+  tasks:
+
+    - name: Add the repo where we can download Jenkins
+
+      yum_repository:
+
+        name: jenkins-ci
+
+        description: jenkins repository
+
+        baseurl: http://pkg.jenkins.io/redhat
+
+        gpgkey: https://pkg.jenkins.io/redhat/jenkins.io.key
+
+        gpgcheck: yes
+
+    - name: import key for jenkins repo
+
+      rpm_key:
+
+        state: present
+
+        key: https://pkg.jenkins.io/redhat/jenkins.io.key
+
+    - name: Install Java, Jenkins and Maven 
+
+      yum:
+
+        name: '{{ packages }}'
+
+        state: present
+
+        update_cache: true
+
+      vars:
+
+        packages:
+
+          - jenkins
+
+          - java-devel
+
+          - maven
+
+    - name: Configure JVM Arguments
+
+      lineinfile:
+
+        dest: /etc/sysconfig/jenkins
+
+        regexp: '^JAVA_ARGS='
+
+        line: 'JAVA_ARGS="-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"'
+
+
+    - name: reload systemctl daemon
+
+      command: systemctl daemon-reload
+
+    - name: Starting Jenkins Service
+
+      service:
+
+        name: jenkins
+
+        state: started
+
+    - name: Add the Jenkins Service to firewall
+
+      firewalld:
+
+        service: jenkins
+
+        state: enabled
+
+        permanent: yes
+
+        immediate: yes
+
+    - name: Add port 8080 to the firewall 
+
+      firewalld:
+
+        port: 8080/tcp
+
+        state: enabled
+
+        permanent: yes
+
+        immediate: yes

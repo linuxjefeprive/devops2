@@ -1,0 +1,14 @@
+---
+  - name: Install and configure Tomcat on EC2 instance
+    hosts: ec2
+    become: yes
+    tasks:
+      - name: Install Tomcat Service
+        ansible.builtin.yum:
+          name: tomcat
+          state: present
+
+      - name: Start Tomcat Service
+        ansible.builtin.service:
+          name: tomcat
+          state: started
