@@ -153,7 +153,7 @@ sudo echo "[ec2]
 ec2-ansible ansible_host=`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" > /etc/ansible/hosts
 # Here we add the IP Address and username + SSH key for the newly created EC2 Instance to the ansible hosts file, so we are able to connect to it. 
 echo " Ansible inventory edited to contain EC2 Instance "
-echo " Ansible inventory edited to contain EC2 Instance "
+echo " Ansible inventory edited to contain EC2 Instance " >> $HOME/devops2/installer.sh.log
 
 sudo chown $USER $HOME/.ssh/thekey.pem # Because of Sudo/Root invocation the keyfile is now owned by root. We need to change this to the user that runs the script. 
 sudo chgrp $USER $HOME/.ssh/thekey.pem # Set group to users group.
