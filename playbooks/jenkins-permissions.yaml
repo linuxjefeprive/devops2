@@ -1,0 +1,27 @@
+---
+ - hosts: localhost
+   become: yes
+   tasks:
+    - file:
+        path: /var/lib/jenkins/.ssh/
+        owner: jenkins
+        group: jenkins
+        mode: 0700
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key
+        owner: jenkins
+        group: jenkins
+        mode: 0600
+
+    - file:
+        path: /var/lib/jenkins/.ssh/jenkins-key.pub
+        owner: jenkins
+        group: jenkins
+        mode: 0600
+
+
+
+
+
+

@@ -191,7 +191,7 @@ echo "jenkins-config.yaml did not run correctly" >> $HOME/devops2/installer.sh.l
 
 fi
 
-
+ansible-playbook $HOME/devops2/playbooks/jenkins-permissions.yaml
 source $HOME/devops2/config-scripts/jenkins-ssh-settings.sh
 
 if [ $? = 0 ]; then
