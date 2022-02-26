@@ -11,7 +11,7 @@ if (( $EUID != 0 )); then # Because our script requires root privileges we need 
     exit 1
 fi
 
-
+### Here we confirm user has indeed configured the creds.tf file with accurate AWS keys.
 read -p "Did you modify the devops2/terraform/creds.tf file to contain your up to date AWS credentials? (y/n)" choice
 
 case "$choice" in 
@@ -27,17 +27,20 @@ case "$choice" in
 esac
 
 
-
+# Here we choose the distro so we know which play to invoke later on in script.
 
 echo " Are you running redhat or ubuntu? Please type redhat or ubuntu"
 echo
 read -p "  Distro:  " OS
 echo
+
+# This is where we get the password for jenkins from the user input. We store it as a variable to pass on to our jenkins configure script later.
 echo " What would you like the password for jenkins user 'jenkins' to be? (text hidden)"
 echo
 read -sp "  Jenkins Password:  " PASS
 echo 
 
+# Here we make the script pick the right OS block for installation.
 case $OS in
 
 redhat)
@@ -124,7 +127,7 @@ mkdir $HOME/.ssh/ # make sure folder .ssh exists
 chown $USER $HOME/.ssh/  # set owner and group to user instead of root 
 chgrp $USER $HOME/.ssh/
 
-touch $HOME/.ssh/known_hosts
+touch $HOME/.ssh/known_hosts # Same for known hosts.
 chown $USER $HOME/.ssh/known_hosts
 chgrp $USER $HOME/.ssh/known_hosts
 chmod 644 $HOME/.ssh/known_hosts
@@ -134,6 +137,7 @@ echo ".ssh folder is set up and populated with (empty) known hosts file" >> $HOM
 
 cd $HOME/devops2/terraform/
 
+# Here we call terraform to init, plan and apply inside terraform directory.
 /usr/bin/terraform init # using full path to binary because root on RPM does not include /usr/local/bin in PATH's  
 /usr/bin/terraform plan 
 /usr/bin/terraform apply -auto-approve
@@ -148,13 +152,14 @@ echo echo "Terraform failed to set up EC2 instance, check creds.tf, and make sur
 fi
 
 
-
+# This is where we add the terraform created host to the ansible inventory.
 sudo echo "[ec2]
 ec2-ansible ansible_host=`/usr/bin/terraform output -raw instance_public_ip` ansible_user=ec2-user remote_user=ec2-user ansible_ssh_private_key_file=$HOME/.ssh/thekey.pem" > /etc/ansible/hosts
 # Here we add the IP Address and username + SSH key for the newly created EC2 Instance to the ansible hosts file, so we are able to connect to it. 
 echo " Ansible inventory edited to contain EC2 Instance "
 echo " Ansible inventory edited to contain EC2 Instance " >> $HOME/devops2/installer.sh.log
 
+#### Making sure keyfile is set correctly to user.
 sudo chown $USER $HOME/.ssh/thekey.pem # Because of Sudo/Root invocation the keyfile is now owned by root. We need to change this to the user that runs the script. 
 sudo chgrp $USER $HOME/.ssh/thekey.pem # Set group to users group.
 sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfile to be only rw for the owner, to prevent security issues, and make it easier for ansible to work with the file. 
@@ -162,6 +167,7 @@ sudo chmod 600 $HOME/.ssh/thekey.pem # Here we set the permissions for the keyfi
 echo " Sleeping for 30 seconds to give EC2 Instance time to properly initialize. (or ssh might not be ready) "
 sleep 30s # Put the script to sleep for 0.5 minute 
 
+#### First attempt to add fingerprints for non-prompt SSH access. 
 ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> $HOME/.ssh/known_hosts #Here we add the remote key fingerprint for automation.
 sudo ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> $HOME/.ssh/known_hosts
 sudo ssh-keyscan -H `/usr/bin/terraform output -raw instance_public_ip` >> ~/.ssh/known_hosts ## Also for sudo :) 
@@ -176,10 +182,10 @@ echo "SSH keys could not be added" >> $HOME/devops2/installer.sh.log
 fi 
 
 
-
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem,"
 echo " All done, `/usr/bin/terraform output -raw instance_public_ip` added to ansible inventory under hostgroup ec2, keyfile saved in $HOME/.ssh/thekey.pem " >> $HOME/devops2/installer.sh.log
 
+##### This is where we invoke expect to pass our password to the playbook that takes care of jenkins configuration.
 $HOME/devops2/config-scripts/expect/expect.sh $PASS $HOME
 
 if [ $? = 0 ]; then
@@ -191,6 +197,7 @@ echo "jenkins-config.yaml did not run correctly" >> $HOME/devops2/installer.sh.l
 
 fi
 
+##### Running extra SSH / Jenkins permissions modification. Needed to set everything right. 
 ansible-playbook $HOME/devops2/playbooks/jenkins-permissions.yaml
 source $HOME/devops2/config-scripts/jenkins-ssh-settings.sh
 
@@ -203,6 +210,10 @@ echo " Jenkins ssh-settings.sh did not run correctly " >> $HOME/devops2/installe
 
 fi
 
+##### Two more expect invoke's for ansible plays that connect using SSH. Expect is to fix adding fingerprints if it has not been done yet. 
+###### $HOME variable is always passed along for correct directory structure / finding.
+##### Expect2 runs ansible tomcat installation playbook.
+##### Expect3 runs SSH configuration playbook and is the last script we run.
 
 $HOME/devops2/config-scripts/expect/expect2 $HOME
 echo expect2 script finished
@@ -217,6 +228,7 @@ echo " Tomcat playbook tomcat-ec2.yaml did not run correctly " >> $HOME/devops2/
 
 fi
 
+#### Here we tell the user how to work the magic using localhost:8080 to auto-import jobs, and send out the war file automatically. 
 echo " Environment is set up correctly. Browse to localhost:8080 and click the build button on the seed job, after build is complete click the build button on the WAR file project. After build is done WAR is automaticly deployed to tomcat. See `/usr/bin/terraform output -raw instance_public_ip`:8080/webapp for the results " 
 echo " Environment is set up correctly. Browse to localhost:8080 and click the build button on the seed job, after build is complete click the build button on the WAR file project. After build is done WAR is automaticly deployed to tomcat. See `/usr/bin/terraform output -raw instance_public_ip`:8080/webapp for the results " >> $HOME/devops2/installer.sh.log 
 

@@ -2,9 +2,9 @@
 
 provider "aws" {
 
-  access_key = "ASIATLHI5DFTQQNIRGXV"
-  secret_key = "bFRXC6j69KWDg74/1hZE/OtTsO+aX9glqRJ7T8vY" 
-  token = "FwoGZXIvYXdzEGMaDNr5OjEjvF44QBoUGCK7AcKiFnnJeFqSDDYlVLEcpAKFduukyt0usKiYN8Kq6Xvs0zuw6qSmdlslx4tpn0orQ7OTpInrPScMTzVxqCyrh/Pu1fpankWO/aCcVPTgqoOuArBonVU8LEQ+2K4/+cMqtEsGTfbPDPFoYpJq/St58rnxJcuzh31YlXbO2iIsczm5daAyY+hAumLxfsxgfqYhi5/ghpWYJlmI454ZxhBnwZa5HpGpIFRKSewmnU4XYnnlDEDcTynmBv45frYowrHkkAYyLYsjvXwYCIh7+bGiPMi/965WB9/lNXerWdUvGS51CVbY1adYZHWnc87BUMpoog=="
+  access_key = "ASIATLHI5DFTVQTZ4OF6"
+  secret_key = "CsA9fCzFnYSRe4OzJRJ60mduCyZXnP6dvIRG45qY" 
+  token = "FwoGZXIvYXdzEHEaDBpj9eZrmjlFBOvD8iK7AVUw8GivEOFSsP75aaoYUS7j04tbP57E4S/bQTNNAFquZHz+fl2rfvT6yolfeoEzHUyNjWYUYEl9KlSWohCndpnFmYBY5E3S0VDurBxGmiu2r2ucQfy25QBglkX2aGVfRAree0mk7BlZfrbeOATjAe7zQUrGhq/QgTmaT7sd5cD5cSCqYsVFwecddIEX8qQFlWYnmy0vY6W4gg5ZhyLRCfFyFFy3QgIbc4gad9MyP88egbNvx7ZLVskfg2oombrnkAYyLUVSovsfWb4f5TuyZ//AVvhyxrKtzyesPPQPa9HuOcvAl5caU6B/G3yXyeH4uQ=="
   region = "us-east-1"
 }
 
