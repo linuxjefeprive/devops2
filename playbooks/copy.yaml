@@ -1,5 +1,5 @@
 ---
-
+##### This play copies the Jenkins Ansible SSH key to EC2-Instance. (We differ between Ansible node, and Ansible Jenkins node using SSH.
   - hosts: ec2
     tasks:
     - name: Copy Jenkins SSH key to EC2-Instance
