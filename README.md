@@ -1,6 +1,11 @@
 https://github.com/linuxjefeprive/devops2
+
+
 This is my CalTech DevOps PGP Program Project for the PG DO - DevOps Certification Training. Project 1, CI/CD Deployment Using Ansible CM Tool.
 The github folder is called devops2, because this is the second project I’m doing for the PG Devops program. Do note; this is project #1. 
+
+
+
 ASSIGNMENT DESCRIPTION
 You are a DevOps engineer at XYZ Ltd. Your company is working on a Java application and wants to automate WAR file artifact deployment so that they don’t have to perform WAR deployment on Tomcat/Jetty web containers. Automate Ansible integration with Jenkins CI server so that we can run and execute playbooks to deploy custom WAR files to a web container and then perform restart for the web container.
  
@@ -9,18 +14,31 @@ Steps to Perform:
 2.	Install Ansible plugins in Jenkins CI server
 3.	Prepare Ansible playbook to run Maven build on Jenkins CI server
 4.	Prepare Ansible playbook to execute deployment steps on the remote web container with restart of the web container post deployment
+
+
+
+
 The assignment goals were reached with relative ease, which is why I decided to try taking this project to the next level, by fully automating everything from scratch, configuring and setting up everything with a single one click installer. My goal was to not use docker, but to install and configure everything from scratch using code. Because turning off security options would make this project easier, I decided to have my script handle everything with security on. The only exception is Jenkins script approval, which would not be needed anyway because in production script vetting would be done on/via github. I have completely automated everything, and there is no usage of the web UI or interaction during install what so ever. (except at the start of the script). The only thing we use the UI for is to press the “build” button after initial setup to seed the jobs from github, import the jobs automatically and execute the WAR build to deploy to our Tomcat instance. Usage of this script is relatively easy;
+
+
 
 Clone https://github.com/linuxjefeprive/devops2.git to your local HOME directory. The script is build to support RedHat and Ubuntu based distro’s, and has been tested and shown to run smoothly (no interaction needed after initial script setup) on Ubuntu 18.04, Ubuntu 20.04, Rocky Linux 8 and Simplilearn online environment. 
 
+
 $ Cd devops2/terraform/      # adjust the creds.tf file to contain up to date AWS authentication keys.
+
 $ Cd ..                      # to go into HOME/devops2 folder
+
 $ sudo ./installer           # To start the installer.
+
+
 
 The script will start and will first ask the user if he supplied the correct credentials for AWS in the creds.tf file. If you already did this please confirm. 
 The script will ask the user if he is using Ubuntu or redhat distro. Please confirm your distro by answering the script. 
 Last the script will ask the user how he would the password for Jenkins to be. User will always be named “jenkins”
 The password is taken as a variable, and passed to “expect” script to be used later on automatically during the Jenkins configuration.
+
+
 
 This will initiate the script, and perform the following actions; 
 
@@ -44,6 +62,7 @@ This will initiate the script, and perform the following actions;
 
 10: If anything goes wrong, (hasn’t happened with the finished version on 4 different hosts with different OS’s so far!) there is a logfile created in devops2/ called installer.sh.log where actions are logged when finished or failed.   
 This is how I’ve set up a Jenkins server completely automatically, from the ground up. Including plugins, jobs, permissions and configuration. The WAR deployment is done by simply clicking build, and is also completely automatic. In the future we would probably add webhooks to build on github push, and add other magic, but so far I’ve not found a way to set up webhooks completely automatic. (since github requires config settings). 
+
 
 All code is commented in detail, so grading should be easy looking at the code. 
 
