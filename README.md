@@ -29,6 +29,8 @@ ACTUAL PROJECT
 
 The assignment goals were reached with relative ease, which is why I decided to try taking this project to the next level, by fully automating everything from scratch, configuring and setting up everything with a single one click installer. My goal was to not use docker, but to install and configure everything from scratch using code. Because turning off security options would make this project easier, I decided to have my script handle everything with security on. The only exception is Jenkins script approval, which would not be needed anyway because in production script vetting would be done on/via github. I have completely automated everything, and there is no usage of the web UI or interaction during install what so ever. (except at the start of the script). The only thing we use the UI for is to press the “build” button after initial setup to seed the jobs from github, import the jobs automatically and execute the WAR build to deploy to our Tomcat instance. Usage of this script is relatively easy;
 
+This repo is used, the other repo's used are https://github.com/linuxjefeprive/jenkins-seed Where I created the seed file for Jenkins, and https://github.com/linuxjefeprive/Hello-World-Code , which is the application that will be deployed to EC2 instance using jenkinsfile and ansible. 
+
 
 ##########################################################################################
 
