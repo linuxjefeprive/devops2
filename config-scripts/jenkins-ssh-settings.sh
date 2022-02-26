@@ -6,6 +6,10 @@ echo "Please run as Root "
 echo "Please Run as Root" > errorlog.log
 fi 
 
+#### 
+This script is used to add Jenkins entry into Ansible, so Jenkins can use a different SSH keyfile than the non-jenkins invoked ansible. (for Logging and security)
+
+
 # Adding known hosts to Jenkins folder 
 sudo cp $HOME/.ssh/known_hosts /var/lib/jenkins/.ssh/known_hosts
 sudo chown jenkins /var/lib/jenkins/.ssh/known_hosts
