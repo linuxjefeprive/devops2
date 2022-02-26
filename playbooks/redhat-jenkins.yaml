@@ -1,3 +1,5 @@
+##### This is a simple play installing Jenkins in RedHat Distro's. Also sets headless mode, for use with JCasC and sets firewall correctly.
+
 - hosts: localhost
   become: true
   tasks:
