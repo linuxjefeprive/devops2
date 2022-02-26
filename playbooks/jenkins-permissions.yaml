@@ -1,3 +1,4 @@
+#### This script is to circumvent a bug on Ubuntu 20.04 where the Jenkins play would not run in its entirety. 
 ---
  - hosts: localhost
    become: yes
