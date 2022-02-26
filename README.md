@@ -6,7 +6,11 @@ The github folder is called devops2, because this is the second project I’m do
 
 
 
+##################################################################################
+
 ASSIGNMENT DESCRIPTION
+
+
 You are a DevOps engineer at XYZ Ltd. Your company is working on a Java application and wants to automate WAR file artifact deployment so that they don’t have to perform WAR deployment on Tomcat/Jetty web containers. Automate Ansible integration with Jenkins CI server so that we can run and execute playbooks to deploy custom WAR files to a web container and then perform restart for the web container.
  
 Steps to Perform:
@@ -16,10 +20,21 @@ Steps to Perform:
 4.	Prepare Ansible playbook to execute deployment steps on the remote web container with restart of the web container post deployment
 
 
+#######################################################################################
+
+ACTUAL PROJECT 
+
+########################################################################################
 
 
 The assignment goals were reached with relative ease, which is why I decided to try taking this project to the next level, by fully automating everything from scratch, configuring and setting up everything with a single one click installer. My goal was to not use docker, but to install and configure everything from scratch using code. Because turning off security options would make this project easier, I decided to have my script handle everything with security on. The only exception is Jenkins script approval, which would not be needed anyway because in production script vetting would be done on/via github. I have completely automated everything, and there is no usage of the web UI or interaction during install what so ever. (except at the start of the script). The only thing we use the UI for is to press the “build” button after initial setup to seed the jobs from github, import the jobs automatically and execute the WAR build to deploy to our Tomcat instance. Usage of this script is relatively easy;
 
+
+##########################################################################################
+
+INSTRUCTIONS AND EXPLANATION
+
+##########################################################################################
 
 
 Clone https://github.com/linuxjefeprive/devops2.git to your local HOME directory. The script is build to support RedHat and Ubuntu based distro’s, and has been tested and shown to run smoothly (no interaction needed after initial script setup) on Ubuntu 18.04, Ubuntu 20.04, Rocky Linux 8 and Simplilearn online environment. 
@@ -60,11 +75,30 @@ This will initiate the script, and perform the following actions;
 
 9: After the seed job has finished building, you will notice the WAR job has become available in Jenkins. Click the “build” button, to pull the files from github and start building. The ansible script is saved in the github folder as well, so everything will be done automatically. After the build is done you can browse to “ec2 instance:8080/webapp” to see the fruits of our labour. (address was given to you at end of installer script )
 
-10: If anything goes wrong, (hasn’t happened with the finished version on 4 different hosts with different OS’s so far!) there is a logfile created in devops2/ called installer.sh.log where actions are logged when finished or failed.   
+#######################################################################################
+
+EXTRA INFO
+
+#######################################################################################
+
+
+
+If anything goes wrong, (hasn’t happened with the finished version on 4 different hosts with different OS’s so far!) there is a logfile created in devops2/ called installer.sh.log where actions are logged when finished or failed.   
 This is how I’ve set up a Jenkins server completely automatically, from the ground up. Including plugins, jobs, permissions and configuration. The WAR deployment is done by simply clicking build, and is also completely automatic. In the future we would probably add webhooks to build on github push, and add other magic, but so far I’ve not found a way to set up webhooks completely automatic. (since github requires config settings). 
 
 
 All code is commented in detail, so grading should be easy looking at the code. 
+
+
+#######################################################################################
+
+AFTERWORD
+
+#######################################################################################
+
+This project has been an amazing learning experience! I have learned a lot about automation, especially when it comes to Ansible and Jenkins. And i've learned that there are lots of ways to avoid using UI and do everything by CLI setting up services. Even setting up and configuring Jenkins completely from code which seemed impossible at first is completely possible!
+
+In the future I want to expand on using Ansible vault, roles, and generally getting better at Ansible and Terraform. 
 
 Thank you !
 
