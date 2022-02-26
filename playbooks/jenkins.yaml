@@ -1,5 +1,6 @@
 ## This is the configuration for JCasC , setting the Jenkins Configuration correctly. 
 ### I've only specified the custom options, the rest will be defaults. 
+#### This script also sets up the link to my Seed github repo, from where the magic happens using JobDSL to auto import jobs. (in this case only one)
 unclassified:
   location:
     adminAddress: "address not configured yet <nobody@nowhere>"
