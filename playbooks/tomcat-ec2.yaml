@@ -1,3 +1,4 @@
+###### This script is to install Tomcat on the EC2 instance. 
 ---
   - name: Install and configure Tomcat on EC2 instance
     hosts: ec2
