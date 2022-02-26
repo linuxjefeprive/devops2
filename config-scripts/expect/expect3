@@ -1,4 +1,5 @@
 #!/usr/bin/expect
+#### Script to continue SSH session without fingerprint, used with copy.yaml playbook to set up SSH correctly
 
 set timeout -1
 set HOME [lindex $argv 0]
