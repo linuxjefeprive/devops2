@@ -1,4 +1,6 @@
-
+###### This script is used to configure Jenkins. It first has to read the first admin pass from file afterwards it unlocks jenkins and adds user "jenkins" with pass provided in installer.sh prompt. 
+###### After that the script installs the plugins we defined into the script, which are the base plugins, plus ansible, JCasC and JobDSL. Afterwards it copies the configuration recipes to the right folder, and restart jenkins.
+###### Next up Jenkins SSH key is set up for later use with Jenkins Ansible plugin, so we have a seperate SSH keypair for Jenkins. 
 ---
   - hosts: localhost
     become: yes
