@@ -1,4 +1,4 @@
-
+#### Outputs values needed in other scripts. ID and IP! 
 
  output "instance_id" {
 
